@@ -12,17 +12,6 @@ import (
 	"strings"
 	"time"
 )
-
-type Problem struct {
-	question string
-	answer string
-}
-
-type Settings struct {
-	filename *string
-	timeLimit *int
-}
-
 func main() {
 	var csvFile *string
 	fmt.Printf("Welcome to my math quiz! Firstly, what is your name: ")
