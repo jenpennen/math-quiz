@@ -67,28 +67,29 @@ func main() {
 	done := make(chan bool, 1)
 	go func() {
 		for i := 0; i < total; i++ {
+			if mistake == 3 {
+				fmt.Println("You reached the maximum number of wrong answers. Please try again later.")
+				done <- true
+				return
+			}
 			fmt.Printf("Question #%d %s = ", i+1, questions[i][0])
 			answer, _:= reader.ReadString('\n')
 			answer = strings.TrimSpace(strings.ToLower(answer))
 			//check if answer is correct
 			if strings.Compare(questions[i][1], answer) == 0 {
 				correct++
+				fmt.Println("Correct!")
 			} else {
 				mistake++
-				
-				if mistake == 3 {
-					fmt.Printf("You got %v wrong. Please try again later.\n", mistake)
-					close(done)
-				} else {
 				fmt.Printf("You got %v wrong. \n", mistake)}
-			}
+			
 		}
 		done <- true
 	}()
 
 	select {
 	case <-done:
-		fmt.Println("Good Job!")
+		fmt.Printf("You got %v out of %v correct. Good Job!\n", correct, total)
 	case <-time.After(time.Duration(*duration) * time.Second):
 		fmt.Println("\nYou reached time limit. Better luck next time!")
 	}
